@@ -8,7 +8,7 @@ class App extends Component {
         super(props);
         this.my_musics = [{song_title:" t", album: "alb", artist: "art", genre: "gen", release_date: "date" }];
         this.state ={
-            
+            songs : []
         }
         
     }
@@ -22,20 +22,38 @@ class App extends Component {
         this.setState({
             songs: response.data
         })
-        console.log(response.data);
+        
     
        }
          
     render() { 
         return ( 
             <React.Fragment>
-               {this.my_musics.map((musicinfo) =>{
+            <table>
+               <tr>
+                <th>Title</th>
+                <th>Album</th>
+                <th>Artist</th>
+                <th>Genre</th>
+                <th>Release Date</th>
+            </tr>
+                
 
-                  return<h4>  Title: {musicinfo.song_title}  Album: {musicinfo.album}  Artist: {musicinfo.artist}  Genre: {musicinfo.genre} Release Date: {musicinfo.release_date}</h4>
-                  
+               {this.state.songs.map((song) =>{
+                 
+                  return   <tr> 
+                            <td>{song.title}</td> 
+                            <td>{song.album}</td> 
+                            <td>{song.artist}</td> 
+                            <td>{song.genre}</td>
+                            <td> {song.release_date}</td>
+                           
+                           
+                           </tr>
+                
                })}
 
-               
+            </table>   
             </React.Fragment>
          );
     }
