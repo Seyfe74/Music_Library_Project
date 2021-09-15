@@ -1,62 +1,95 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import MusicTable from './MusicTable/MusicTable';
+import SongForm from './SongForm/SongForm';
 
 
 
 class App extends Component {
     constructor(props) {
         super(props);
-        this.my_musics = [{song_title:" t", album: "alb", artist: "art", genre: "gen", release_date: "date" }];
+        
         this.state ={
-            songs : []
+            songs : [],
+           
+
+           
         }
         
     }
+
+    addSongs =(newSong) =>{
+        console.log(newSong);
+        // Make and axios POST request to our backend API and send the newSong in the body   
+        axios.post('http://127.0.0.1:8000/music/',  newSong,)
+        .then((response) => {
+            console.log(response);
+          }, (error) => {
+            console.log(error);
+          });
+
+        this.getMusicInfo();
+
+    }
+
+   
+
+    handleDelete = (id)=> {
+
+        console.log(id);
+        axios.delete(`http://127.0.0.1:8000/music/${id}/`)
+        .then((response) => {
+            console.log(response);
+          }, (error) => {
+            console.log(error);
+          });
+          
+
+        this.getMusicInfo();
+
+
+    }
+
+
+
     componentDidMount(){
         this.getMusicInfo ()
 
     }  
+
+
     async getMusicInfo (){
-        let response = await axios.get('http://127.0.0.1:8000/music/');
+        
+       
+          let response = await axios.get('http://127.0.0.1:8000/music/');
         
         this.setState({
             songs: response.data
-        })
-        
-    
+        })    
        }
+
+      /* async deleteMusicInfo (){
+        let response = await axios.get('http://127.0.0.1:8000/music/1/' + 'id/');
+        
+        this.setState({
+            song: response.data
+        })    
+     }*/
+
+
          
     render() { 
         return ( 
-            <React.Fragment>
-            <table>
-               <tr>
-                <th>Title</th>
-                <th>Album</th>
-                <th>Artist</th>
-                <th>Genre</th>
-                <th>Release Date</th>
-            </tr>
-                
+            
+        <React.Fragment>
+            <MusicTable mtable = {this.state.songs} hd = {this.handleDelete}/>
+            <SongForm addNew ={this.addSongs} />
+            
 
-               {this.state.songs.map((song) =>{
-                 
-                  return   <tr> 
-                            <td>{song.title}</td> 
-                            <td>{song.album}</td> 
-                            <td>{song.artist}</td> 
-                            <td>{song.genre}</td>
-                            <td> {song.release_date}</td>
-                           
-                           
-                           </tr>
-                
-               })}
-
-            </table>   
-            </React.Fragment>
+        </React.Fragment>
          );
-    }
+    } 
+    
 }
  
 export default App;
